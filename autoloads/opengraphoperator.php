@@ -123,7 +123,7 @@ class OpenGraphOperator
 		{
 			$literalValues = $ogIni->variable( $contentObject->contentClassIdentifier(), 'LiteralMap' );
 			eZDebug::writeDebug($literalValues, 'LiteralMap');
-		
+
 			if ( $literalValues )
 			{
 				foreach($literalValues as $key => $value)
@@ -138,36 +138,43 @@ class OpenGraphOperator
 		{
 			$attributeValues = $ogIni->variableArray( $contentObject->contentClassIdentifier(), 'AttributeMap' );
 			eZDebug::writeDebug($attributeValues, 'AttributeMap');
-			
+
 			if ( $attributeValues )
 			{
-				foreach($attributeValues as $key => $value)
-				{
-					$contentObjectAttributeArray = $contentObject->fetchAttributesByIdentifier(array($value[0]));
+				foreach( $attributeValues as $key => $value ) {
+					$attributeIdentifiers = explode( ',', $value[0] );
+					$dataMember = isset( $value[1] ) ? $value[1] : false;
+
+					$contentObjectAttributeArray = $contentObject->fetchAttributesByIdentifier( $attributeIdentifiers );
 					if( is_array( $contentObjectAttributeArray ) === false ) {
 						continue;
 					}
 					$contentObjectAttributeArray = array_values($contentObjectAttributeArray);
-					$contentObjectAttribute = $contentObjectAttributeArray[0];
-		
-					if($contentObjectAttribute instanceof eZContentObjectAttribute)
-					{
-						$openGraphHandler = ngOpenGraphBase::getInstance($contentObjectAttribute);
-		
-						if(count($value) == 1)
+
+					foreach( $contentObjectAttributeArray as $contentObjectAttribute ) {
+						if( $contentObjectAttribute instanceof eZContentObjectAttribute === false ) {
+							continue;
+						}
+
+						$openGraphHandler = ngOpenGraphBase::getInstance( $contentObjectAttribute );
+						if( $dataMember ) {
+							$data = $openGraphHandler->getDataMember( $dataMember );
+						} else {
 							$data = $openGraphHandler->getData();
-						else if(count($value) == 2)
-							$data = $openGraphHandler->getDataMember($value[1]);
-						else
-							$data = "";
-		
-						if(is_array( $data ) || strlen($data) > 0)
-							$returnArray[$key] = $data;
+						}
+
+						if(
+							is_array( $data )
+							|| strlen( $data ) > 0
+						) {
+							$returnArray[ $key ] = $data;
+							break;
+						}
 					}
 				}
 			}
 		}
-				
+
 		return $returnArray;
 	}
 
