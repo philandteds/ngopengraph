@@ -34,7 +34,7 @@ class ngOpenGraphFetchFunctions
 				$tags[ $tag ] = $value;
 			}
 		}
-var_dump( $tags );
+
 		return array( 'result' => $tags );
 	}
 }
