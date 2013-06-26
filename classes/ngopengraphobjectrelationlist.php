@@ -50,7 +50,7 @@ class ngOpenGraphObjectRelationList extends ngOpenGraphBase
 					}
 				}
 			}
-			return $images;
+			return (!empty($images)) ? $images : 'http://' . eZSys::hostname() . eZURLOperator::eZImage(null, 'opengraph_default_image.png', '');
 		}
 
 		return $this->getData();
