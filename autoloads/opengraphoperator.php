@@ -178,7 +178,7 @@ class OpenGraphOperator
 		if(!in_array('og:title', $arrayKeys) || !in_array('og:type', $arrayKeys) ||
 			!in_array('og:image', $arrayKeys) || !in_array('og:url', $arrayKeys))
 		{
-			eZDebug::writeError($arrayKeys, 'Missing an OG required field: title, image, type, or url');
+			eZDebug::writeDebug($arrayKeys, 'Missing an OG required field: title, image, type, or url');
 			return false;
 		}
 
@@ -186,7 +186,7 @@ class OpenGraphOperator
 		{
 			if (!in_array('og:site_name', $arrayKeys) || (!in_array('fb:app_id', $arrayKeys) && !in_array('fb:admins', $arrayKeys)))
 			{
-				eZDebug::writeError($arrayKeys, 'Missing a FB required field (in ngopengraph.ini): app_id, DefaultAdmin, or Sitename (site.ini)');
+				eZDebug::writeDebug($arrayKeys, 'Missing a FB required field (in ngopengraph.ini): app_id, DefaultAdmin, or Sitename (site.ini)');
 				return false;
 			}
 		}
